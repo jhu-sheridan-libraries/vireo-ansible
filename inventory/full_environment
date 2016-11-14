@@ -1,0 +1,41 @@
+# NOTE: USE WITH CAUTION
+# this is intended to manage cross-environment operations
+# (e.g. data refresh from prod to stage &/or dev)
+# running a playbook without proper limiting will affect dev, stage, and prod
+# ...there are lots of ways this could be problematic.
+# for most operations, use of the environment-specific inventory files is recommended
+
+# dev:
+# ------------------
+#[app_dev]
+#vireo-dev.jhu.dev
+
+#[dev:children]
+#app_dev
+
+# stage:
+# ------------------
+[app_stage]
+vireostage.library.jhu.edu
+
+[stage:children]
+app_stage
+
+# prod:
+# ------------------
+[app_prod]
+etd.library.jhu.edu
+
+[prod:children]
+app_prod
+
+# groups:
+# ------------------
+[app_servers:children]
+#app_dev
+app_stage
+app_prod
+
+[app_not_prod:children]
+#app_dev
+app_stage

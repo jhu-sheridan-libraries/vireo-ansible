@@ -1,0 +1,10 @@
+# stage:
+# ------------------
+[app_stage]
+vireostage.library.jhu.edu
+
+[stage:children]
+app_stage
+
+[app_servers:children]
+app_stage

@@ -1,0 +1,15 @@
+# REM: if you are looking for passwords or other variables
+# that vary from dev to stage to prod, check the other subfolders
+
+# meta vars
+project:        "vireo-ansible"
+version:        "0.1.0"
+
+# SSH vars
+login_user:     "deploy"
+login_user_key: "{{ project }}_{{ environ }}"
+create_login_user_key:  true
+
+ssh_port: 22
+# uncomment after first run (if not 22):
+# ansible_ssh_port: "{{ ssh_port }}"

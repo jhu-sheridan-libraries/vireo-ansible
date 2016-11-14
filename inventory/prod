@@ -1,0 +1,10 @@
+# prod:
+# ------------------
+[app_prod]
+etd.library.jhu.edu
+
+[prod:children]
+app_prod
+
+[app_servers:children]
+app_prod

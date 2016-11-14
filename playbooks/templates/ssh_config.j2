@@ -1,0 +1,10 @@
+Host {{ inventory_hostname }} {{ inventory_hostname | replace('.' + hostvars[inventory_hostname]['domain'],'') }}
+	Hostname {{ inventory_hostname }}
+	User {{ login_user }}
+	IdentityFile ~/.ssh/{{ hostvars[inventory_hostname]['login_user_key'] }}
+	PreferredAuthentications publickey
+	IdentitiesOnly yes
+{% if hostvars[inventory_hostname]['environ'] == 'dev'  %}
+	StrictHostKeyChecking no
+	UserKnownHostsFile=/dev/null
+{% endif %}

@@ -1,0 +1,33 @@
+---
+- name: secure SSH
+  hosts: all
+  become: true
+
+  handlers:
+    - name: restart ssh
+      service: name={{ ssh_service }} state=restarted
+
+  tasks:
+    # alternately, consider http://docs.ansible.com/ansible/playbooks_best_practices.html#operating-system-and-distribution-variance
+    - name: include os-specific variables
+      include_vars: "{{ item }}"
+      with_first_found:
+        - "vars/{{ ansible_distribution }}.yml"
+        - "vars/{{ ansible_os_family }}.yml"
+        - "vars/defaults.yml"
+
+    - name: disallow password authentication for "{{ login_user }}" user
+      blockinfile:
+        dest: /etc/ssh/sshd_config
+        block: |
+          Match User {{ login_user }}
+              PasswordAuthentication no
+      notify: restart ssh
+
+    - name: disallow root login
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: '^PermitRootLogin\s+no'
+        line: "PermitRootLogin no"
+        state: present
+      notify: restart ssh

@@ -1,0 +1,15 @@
+# post automation_setup.yml, we don't need this anymore...
+# ansible_ssh_user: "{{ vault_ansible_ssh_user }}"
+
+# SSH vars
+environ:  "prod" # dev || stage || prod
+login_user_passphrase: "{{ vault_login_user_passphrase }}"
+domain: "library.jhu.edu"
+
+# db vars
+db_name: "{{ vault_db_name }}"
+db_user: "{{ vault_db_user }}"
+db_pass: "{{ vault_db_pass }}"
+
+# mail vars
+smtp_host: "{{ vault_smtp_host }}"

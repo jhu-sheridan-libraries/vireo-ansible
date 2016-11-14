@@ -1,0 +1,3 @@
+---
+- include: playbooks/automation_setup.yml
+- include: playbooks/secure_ssh.yml
