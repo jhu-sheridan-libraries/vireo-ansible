@@ -2,10 +2,18 @@
 anonymize PII data in Vireo (3.x)
 currently, leaves names intact for testing
 */
--- person emails
+-- person data
 UPDATE person p
-SET email = 'test+' || ID || '@' || '{{ email_domain_name }}',
-permanentemailaddress = 'perm+' || ID || '@' || '{{ email_domain_name }}'
+SET email                   = 'test+'    || ID || '@' || '{{ email_domain_name }}',
+    currentemailaddress     = 'current+' || ID || '@' || '{{ email_domain_name }}',
+    permanentemailaddress   = 'perm+'    || ID || '@' || '{{ email_domain_name }}',
+    netid                   = 'netid+'   || ID || '@' || '{{ email_domain_name }}',
+    currentphonenumber      = '000-000-' || ID,
+    permanentphonenumber    = '111-111-' || ID,
+    currentpostaladdress    =               ID || ' current street',
+    permanentpostaladdress  =               ID || ' permanent street',
+    orcid                   =  ID || '-' || ID || '-' || ID || '-' || ID,
+    birthyear               =  NULL
 WHERE p.email NOT IN ({{ admin_users }});
 
 -- advisor email:
