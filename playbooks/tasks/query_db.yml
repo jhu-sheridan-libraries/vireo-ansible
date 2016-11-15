@@ -1,0 +1,26 @@
+---
+- set_fact:
+    debugging: false
+
+- name: set remote query file value
+  set_fact:
+    remote_query_file: "~/{{ query_file | basename | regex_replace('.j2', '') }}"
+
+- name: copy sql file to the server
+  template:
+    src: "{{ query_file }}"
+    dest: "{{ remote_query_file }}"
+    owner: "{{ admin_user }}"
+    group: "{{ admin_group }}"
+    mode: 0644
+
+- name: execute query from file
+  shell: "psql -U {{ user }} {{ database }} < {{ remote_query_file }}"
+  register: result
+  become: yes
+
+- name: remove the sql file from the server
+  file:
+    path: "{{ remote_query_file }}"
+    state: absent
+  when: not debugging

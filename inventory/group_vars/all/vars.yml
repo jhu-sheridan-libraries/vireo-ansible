@@ -6,10 +6,22 @@ project:        "vireo-ansible"
 version:        "0.1.0"
 
 # SSH vars
-login_user:     "deploy"
-login_user_key: "{{ project }}_{{ environ }}"
+login_user:             "deploy"
+login_group:            "{{ login_user }}"
+login_user_key:         "{{ project }}_{{ environ }}"
 create_login_user_key:  true
 
 ssh_port: 22
 # uncomment after first run (if not 22):
 # ansible_ssh_port: "{{ ssh_port }}"
+
+# db vars
+postgres_user:    "postgres"
+pgdata:           "/var/lib/pgsql/data/"
+pgbin:            ""
+db_backup_file:   "{{ db_name }}_{{ environ }}_backup.sql"
+anon_db_name:     "{{ db_name }}_anon"
+anon_backup_file: "{{ anon_db_name }}_backup.sql"
+
+# admin vars
+email_domain_name: "jhu.edu"

@@ -1,0 +1,13 @@
+/*
+anonymize PII data in Vireo (3.x)
+currently, leaves names intact for testing
+*/
+-- person emails
+UPDATE person p
+SET email = 'test+' || ID || '@' || '{{ email_domain_name }}',
+permanentemailaddress = 'perm+' || ID || '@' || '{{ email_domain_name }}'
+WHERE p.email NOT IN ({{ admin_users }});
+
+-- advisor email:
+UPDATE submission
+SET committeecontactemail = 'advisor+' || ID || '@' || '{{ email_domain_name }}';

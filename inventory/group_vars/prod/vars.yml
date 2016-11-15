@@ -11,5 +11,9 @@ db_name: "{{ vault_db_name }}"
 db_user: "{{ vault_db_user }}"
 db_pass: "{{ vault_db_pass }}"
 
+# admin vars
+# members of this list will not be anonymized (no additional permissions granted):
+admin_users: "{{ vault_admin_users }}"
+
 # mail vars
 smtp_host: "{{ vault_smtp_host }}"

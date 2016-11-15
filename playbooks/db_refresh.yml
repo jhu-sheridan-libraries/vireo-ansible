@@ -1,0 +1,4 @@
+---
+# NOTE: only really works with full_environment inventory file
+- include: db_anonymize.yml
+- include: db_deploy_backup.yml

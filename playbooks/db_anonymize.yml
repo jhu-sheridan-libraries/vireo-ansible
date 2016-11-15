@@ -1,0 +1,131 @@
+---
+# TODO: generalize more
+- name: create anonymized backup of target database
+  hosts: app_prod
+  become: true
+  become_user: "{{ login_user }}"
+
+  handlers:
+    - include: handlers/reload_postgres.yml
+
+  tasks:
+    - name: install ansible postgres prereqs
+      include: tasks/ansible_postgres_prereqs.yml
+
+    - name: add pg_hba entry for target database
+      include: tasks/pg_hba_entry.yml
+      vars:
+        connection_type: "local"
+        database: "{{ db_name }}"
+        user: "{{ db_user }}"
+        auth_method: "md5"
+        state: "present"
+
+    - name: add pg_hba entry for anonymized database
+      include: tasks/pg_hba_entry.yml
+      vars:
+        connection_type: "local"
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        auth_method: "md5"
+        state: "present"
+
+    - name: add pgpass entry for anonymized database
+      include: tasks/pgpass.yml
+      vars:
+        admin_user: "{{ login_user }}"
+        admin_group: "{{ login_group }}"
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        state: "present"
+
+    - name: add pgpass entry for target database
+      include: tasks/pgpass.yml
+      vars:
+        admin_user: "{{ login_user }}"
+        admin_group: "{{ login_group }}"
+        database: "{{ db_name }}"
+        user: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        state: "present"
+
+    - name: backup target database
+      include: tasks/backup_db.yml
+      vars:
+        database: "{{ db_name }}"
+        user: "{{ db_user }}"
+        file: "{{ db_backup_file }}"
+
+    - name: restore anonymized database from target database
+      include: tasks/restore_db.yml
+      vars:
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        file: "{{ db_backup_file }}"
+
+    - name: run query to anonymize database
+      include: tasks/query_db.yml
+      vars:
+        admin_user: "{{ login_user }}"
+        admin_group: "{{ login_group }}"
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        query_file: "queries/anonymize_db.sql.j2"
+
+    - name: backup anonymized database
+      include: tasks/backup_db.yml
+      vars:
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        file: "{{ anon_backup_file }}"
+
+    - name: drop anonymized database
+      postgresql_db:
+        name: "{{ anon_db_name }}"
+        state: "absent"
+      become_user: "{{ postgres_user }}"
+
+    - name: remove pg_hba entry for anonymized database
+      include: tasks/pg_hba_entry.yml
+      vars:
+        connection_type: "local"
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        auth_method: "md5"
+        state: "absent"
+
+    # TODO: review
+    - name: remove pg_hba entry for target database
+      include: tasks/pg_hba_entry.yml
+      vars:
+        connection_type: "local"
+        database: "{{ db_name }}"
+        user: "{{ db_user }}"
+        auth_method: "md5"
+        state: "absent"
+
+    - name: remove pgpass entry for anonymized database
+      include: tasks/pgpass.yml
+      vars:
+        admin_user: "{{ login_user }}"
+        admin_group: "{{ login_group }}"
+        database: "{{ anon_db_name }}"
+        user: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        state: "absent"
+
+    - name: remove pgpass entry for target database
+      include: tasks/pgpass.yml
+      vars:
+        admin_user: "{{ login_user }}"
+        admin_group: "{{ login_group }}"
+        database: "{{ db_name }}"
+        user: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        state: "absent"
+
+    - name: remove the target backup file from the server
+      file:
+        path: "{{ db_backup_file }}"
+        state: absent

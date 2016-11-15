@@ -9,3 +9,5 @@
 roles/*
 !roles/README.md
 !roles/local.*
+db_backup/*
+!db_backup/.keep
