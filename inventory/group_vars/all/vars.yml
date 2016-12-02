@@ -25,3 +25,10 @@ anon_backup_file: "{{ anon_db_name }}_backup.sql"
 
 # admin vars
 email_domain_name: "jhu.edu"
+
+# install vars
+vireo_install_dir: "/opt"
+vireo_install: "{{ vireo_install_dir }}/Vireo"
+
+# config vars
+country: "USA"

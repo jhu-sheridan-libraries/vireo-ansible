@@ -1,0 +1,17 @@
+---
+- name: customize export formats
+  hosts: app_servers
+  become: yes
+
+  tasks:
+    - name: dspace mets jhu format
+      template:
+        src: templates/dspace_mets_jhu.xml.j2
+        dest: "{{ vireo_install }}/conf/formats/dspace_mets_jhu.xml"
+      # TODO: notify: update configs
+
+    - name: modified application context
+      template:
+        src: templates/application-context.xml.j2
+        dest: "{{ vireo_install }}/conf/application-context.xml"
+      # TODO: notify: update configs
