@@ -292,6 +292,13 @@
                     </dim:field>
                     #{/if}
 
+                    <!-- dc.description.provenance = Defense Date -->
+                    #{if sub.getDefenseDate() != null}
+                    <dim:field mdschema="dc" element="description" qualifier="provenance">
+                        This ${ sub.getDocumentType() == null ? "document" : sub.getDocumentType()?.escapeXml()?.raw() } was defended on ${ sub.getDefenseDate().format("yyyy-MM-dd") }.
+                    </dim:field>
+                    #{/if}
+
                     <!-- dc.description.provenance = Statement about when this package was generated. -->
                     <dim:field mdschema="dc" element="description" qualifier="provenance">
                         DSpace METS Submission Ingestion Package generated from Vireo submission #${ sub.getId() } on ${ new java.util.Date().format("yyyy-MM-dd 'at' HH:mm:ss") }
