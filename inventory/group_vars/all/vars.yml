@@ -1,4 +1,4 @@
-# REM: if you are looking for passwords or other variables
+copy# REM: if you are looking for passwords or other variables
 # that vary from dev to stage to prod, check the other subfolders
 
 # meta vars
@@ -20,8 +20,9 @@ postgres_user:    "postgres"
 pgdata:           "/var/lib/pgsql/data/"
 pgbin:            ""
 db_backup_file:   "{{ db_name }}_{{ environ }}_backup.sql"
-anon_db_name:     "{{ db_name }}_anon"
-anon_backup_file: "{{ anon_db_name }}_backup.sql"
+copy_db_name:     "{{ db_name }}_copy"
+copy_backup_file: "{{ copy_db_name }}_backup.sql"
+netid_suffix:     "@johnshopkins.edu"
 
 # admin vars
 email_domain_name: "jhu.edu"
@@ -32,3 +33,8 @@ vireo_install: "{{ vireo_install_dir }}/Vireo"
 
 # config vars
 country: "USA"
+
+# data transform queries
+transform_queries:
+- "institutionalid_from_netid.sql.j2"
+- "anonymize_db.sql.j2"

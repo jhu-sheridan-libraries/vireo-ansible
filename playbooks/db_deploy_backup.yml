@@ -9,7 +9,7 @@
   hosts: app_prod
 
   vars:
-    backup_file: "{{ anon_backup_file }}"
+    backup_file: "{{ copy_backup_file }}"
 
   tasks:
     - name: fetch backup file from server
@@ -35,7 +35,7 @@
   become_user: "{{ login_user }}"
 
   vars:
-    backup_file: "{{ anon_backup_file }}"
+    backup_file: "{{ copy_backup_file }}"
 
   handlers:
     - include: handlers/reload_postgres.yml

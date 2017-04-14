@@ -1,0 +1,5 @@
+/*
+populate institutional identifier with first part of netid
+*/
+UPDATE person p
+SET institutionalidentifier = replace(netid, '{{ netid_suffix }}', '');
