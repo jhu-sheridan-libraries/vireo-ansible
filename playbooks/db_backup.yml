@@ -133,3 +133,4 @@
       file:
         path: "{{ db_backup_file }}"
         state: absent
+      when: not retain_backup

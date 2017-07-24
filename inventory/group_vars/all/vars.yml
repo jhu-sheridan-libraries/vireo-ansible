@@ -23,6 +23,7 @@ db_backup_file:   "{{ db_name }}_{{ environ }}_backup.sql"
 copy_db_name:     "{{ db_name }}_copy"
 copy_backup_file: "{{ copy_db_name }}_backup.sql"
 netid_suffix:     "@johnshopkins.edu"
+retain_backup:    true
 
 # admin vars
 email_domain_name: "jhu.edu"
