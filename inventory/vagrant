@@ -1,10 +1,10 @@
 # dev (vagrant):
 # ------------------
 [app]
-app.test.dev
+vireo.test
 
 #[db]
-#db.test.dev
+#vireodb.test
 
 [dev:children]
 app

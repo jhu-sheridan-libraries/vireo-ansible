@@ -3,9 +3,7 @@
 
 # require_relative './script/authorize_key'
 
-domain          = "test.dev"
-login_user       = "deploy"
-login_key        = "~/.ssh/personal_dev.pub"
+domain          = "test"
 setup_complete  = false
 
 # NOTE: currently using the same OS for all boxen
@@ -29,9 +27,8 @@ Vagrant.configure(2) do |config|
   end
 
   {
-    # 'solr'  => '10.11.12.103',
-    # 'db'    => '10.11.12.102',
-    'app'   => '10.11.12.101'
+    # 'vireodb'    => '10.51.30.102',
+    'vireo'   => '10.51.30.101'
   }.each do |short_name, ip|
     config.vm.define short_name do |host|
       host.vm.network 'private_network', ip: ip
@@ -44,7 +41,7 @@ Vagrant.configure(2) do |config|
 
       host.vm.provider "virtualbox" do |vb|
         vb.name = "#{short_name}.#{domain}"
-        vb.memory = 256
+        vb.memory = 1024
         vb.linked_clone = true
       end
 
@@ -54,16 +51,21 @@ Vagrant.configure(2) do |config|
       # # add authorized key to user created by the prereqs script
       # authorize_key host, auto_user, auto_key
 
-      if short_name == "app" # last in the list
+      if short_name == "vireo" # last in the list
         setup_complete = true
       end
 
       if setup_complete
+        # workaround for https://github.com/mitchellh/vagrant/issues/8142
+        host.vm.provision "shell",
+          inline: "sudo service network restart"
+
         host.vm.provision "ansible" do |ansible|
-          # ansible.galaxy_role_file = "requirements.yml"
+          ansible.galaxy_role_file = "requirements.yml"
           ansible.inventory_path = "inventory/vagrant"
-          ansible.playbook = "main.yml"
+          ansible.playbook = "setup.yml"
           ansible.limit = "all"
+          ansible.verbose = "v"
         end
       end
     end
