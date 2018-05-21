@@ -37,7 +37,11 @@ Vagrant.configure(2) do |config|
       host.hostsupdater.aliases = ["#{short_name}"]
       # avoinding "Authentication failure" issue
       host.ssh.insert_key = false
-      host.vm.synced_folder ".", "/vagrant", disabled: true
+      host.vm.synced_folder "mount",
+        "/vagrant",
+        type: "nfs",
+        mount_options: ['rw', 'vers=3', 'tcp', 'fsc' ,'actimeo=1'],
+        create: true
 
       host.vm.provider "virtualbox" do |vb|
         vb.name = "#{short_name}.#{domain}"

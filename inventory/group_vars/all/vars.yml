@@ -3,7 +3,8 @@ copy# REM: if you are looking for passwords or other variables
 
 # meta vars
 project:        "vireo-ansible"
-version:        "0.1.0"
+version:        "0.2.0"
+debugging:      false
 
 # SSH vars
 login_user:             "deploy"
@@ -11,9 +12,9 @@ login_group:            "{{ login_user }}"
 login_user_key:         "{{ project }}_{{ environ }}"
 create_login_user_key:  true
 
-ssh_port: 22
-# uncomment after first run (if not 22):
-# ansible_ssh_port: "{{ ssh_port }}"
+app_user: "vireo"
+app_group: "{{ app_user }}"
+
 
 # db vars
 postgres_user:    "postgres"
@@ -39,3 +40,17 @@ country: "USA"
 transform_queries:
 - "institutionalid_from_netid.sql.j2"
 - "anonymize_db.sql.j2"
+
+# assetstore vars
+remote_stores_available: true
+# sam.mse.jhu.edu:/files/etd                      /mnt/ETD                nfs4            rw,intr,noatime         0 0
+stores_fstab:
+- name:         "/mnt/ETD"
+  src:          "sam.mse.jhu.edu:/files/etd"
+  fstype:       "nfs4"
+  opts:         "rw,intr,noatime"
+  state:        "mounted"
+stores_subdir:  "vireo_data_prod"
+assetstores:
+  - attachments
+  - deposits
