@@ -7,3 +7,12 @@
 
 - src: https://github.com/dheles/ansible-role-secure-ssh
   name: secure-ssh
+
+- src: https://github.com/dheles/java-ansible-role.git
+  name: java
+
+- src: https://github.com/dheles/postgres-ansible-role.git
+  name: postgres
+
+- src: https://github.com/dheles/play-ansible-role.git
+  name: play
