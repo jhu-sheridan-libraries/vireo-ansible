@@ -6,3 +6,9 @@ environ:  "dev" # dev || stage || prod
 
 # private vars
 login_user_passphrase: "{{ vault_login_user_passphrase }}"
+
+play_version_minor:         4
+play_version_patch:         4
+play_checksum_algorithm:    "sha1" # sha1 | sha256 | md5
+# # play_checksum:              "194bcd9eb9cb075b0d78dcd410a58a72d1ab6f9c"
+# play_checksum:    "d5fc42c0b63b03bfeb9859f5d47e2a20"

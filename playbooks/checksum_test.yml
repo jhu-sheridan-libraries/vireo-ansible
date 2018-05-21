@@ -1,0 +1,54 @@
+---
+- hosts: all
+  # connection: local
+
+  vars:
+    play_version_major:         1
+    play_version_minor:         3
+    play_version_patch:         4
+    play_version:               "{{ play_version_major }}.{{ play_version_minor }}.{{ play_version_patch }}"
+    play_dir:                   "play1-{{ play_version }}"
+    play_download_file:         "{{ play_dir }}.tar.gz"
+    play_checksum_algorithm:    "sha256"
+    checksums:
+      play1_1_3_0_tar_gz:
+        sha1:   "bc794d1369985787cd98d6550273f5ec91e4c38a"
+        sha256: "a3148b4b7454bf34be30a0534dc3a859ec80e5bc0b38a96dbc7aaecfae798547"
+      play1_1_3_1_tar_gz:
+        sha1:   "fe3f19f581abc9a3b42488071e52577806238530"
+        sha256: "58d3c6311efa47e00fa792f7f47636038f4e37ae40961f031a9b83efe6a5143f"
+      play1_1_3_2_tar_gz:
+        sha1:   "dc3a16d44b234e69c5e135cb71f05936017fe003"
+        sha256: "b35d2fa5462780ab20d5a9124edfb9d3644773f45d61ee0b42438ae01111fcf1"
+      play1_1_3_3_tar_gz:
+        sha1:   "aed78c8a62c1834f18125426b28e7807c117cca1"
+        sha256: "cc4bf0d37fdfcea82916b60460427f3149822c43f3af730adee8e50ba98845e0"
+      play1_1_3_4_tar_gz:
+        sha1:   "194bcd9eb9cb075b0d78dcd410a58a72d1ab6f9c"
+        sha256: "c116ae183ff4727cd7f7c7781333e15e0501c4b17154d1f8061243fc55d709e5"
+      play1_1_4_0_tar_gz:
+        sha1:   "fc95bc322b04b9b9b7a17661066cd0f2a44e501a"
+        sha256: "97300b91aacbe5d0c1b52fd3d52f77d36cf39cf72da68df43cb0f1ea52a7c5e7"
+      play1_1_4_1_tar_gz:
+        sha1:   "c8ce6f081c67aa6451f527879fb60284ffaf7b59"
+        sha256: "d0f3cdb156d1790b9c59bc2951eeb7ce2520b57983c78be783a4517f113b6431"
+      play1_1_4_2_tar_gz:
+        sha1:   "d33d6bf7eafcf4290ae62324286e8bb23b4bf56e"
+        sha256: "52962c01651e17cf8233867ceedcfafaad2b9f480666ab3f98819eb3b25969e0"
+      play1_1_4_3_tar_gz:
+        sha1:   "b93926283d5e4a182a4cc52da3b3901736ec7d79"
+        sha256: "2dee028b9c6793d63152fd5d9bdd60654b8567d22ee83225df82cd892a5ba83b"
+      play1_1_4_4_tar_gz:
+        sha1:   "99a8cfb25018d46b6f70ed8bbd273904db91d6a9"
+        sha256: "3eef3b9321a0009cf70f2b043b71e949ba4a88a5a08da94a4bd5995d696d99b6"
+        md5:    "d5fc42c0b63b03bfeb9859f5d47e2a20"
+
+  tasks:
+    - set_fact:
+        checksum_key: "{{ play_download_file | replace('-','_') | replace('.','_')}}"
+    - name: set play checksum
+      set_fact:
+        play_checksum: "{{ checksums[checksum_key][play_checksum_algorithm] }}"
+    - name: get checksum
+      debug:
+        var: play_checksum
