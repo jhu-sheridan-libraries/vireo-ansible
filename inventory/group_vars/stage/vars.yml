@@ -3,6 +3,7 @@
 
 # SSH vars
 environ:  "stage" # dev || stage || prod
+debugging: true
 login_user_passphrase: "{{ vault_login_user_passphrase }}"
 domain: "library.jhu.edu"
 
@@ -17,3 +18,6 @@ admin_users: "{{ vault_admin_users }}"
 
 # mail vars
 smtp_host: "{{ vault_smtp_host }}"
+
+# assetstore vars
+# stores_subdir:  "vireo_data_stage"

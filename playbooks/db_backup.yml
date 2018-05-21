@@ -12,21 +12,25 @@
       include: tasks/ansible_postgres_prereqs.yml
 
     - name: add pg_hba entry for source database
-      include: tasks/pg_hba_entry.yml
+      include_role:
+        name: postgres
+        tasks_from: pg_hba_entry
       vars:
-        connection_type: "local"
+        type: "local"
         database: "{{ db_name }}"
         user: "{{ db_user }}"
-        auth_method: "md5"
+        method: "md5"
         state: "present"
 
     - name: add pg_hba entry for database copy
-      include: tasks/pg_hba_entry.yml
+      include_role:
+        name: postgres
+        tasks_from: pg_hba_entry
       vars:
-        connection_type: "local"
+        type: "local"
         database: "{{ copy_db_name }}"
         user: "{{ db_user }}"
-        auth_method: "md5"
+        method: "md5"
         state: "present"
 
     - name: add pgpass entry for database copy
@@ -91,22 +95,26 @@
       become_user: "{{ postgres_user }}"
 
     - name: remove pg_hba entry for database copy
-      include: tasks/pg_hba_entry.yml
+      include_role:
+        name: postgres
+        tasks_from: pg_hba_entry
       vars:
-        connection_type: "local"
+        type: "local"
         database: "{{ copy_db_name }}"
         user: "{{ db_user }}"
-        auth_method: "md5"
+        method: "md5"
         state: "absent"
 
     # TODO: review
     - name: remove pg_hba entry for source database
-      include: tasks/pg_hba_entry.yml
+      include_role:
+        name: postgres
+        tasks_from: pg_hba_entry
       vars:
-        connection_type: "local"
+        type: "local"
         database: "{{ db_name }}"
         user: "{{ db_user }}"
-        auth_method: "md5"
+        method: "md5"
         state: "absent"
 
     - name: remove pgpass entry for database copy

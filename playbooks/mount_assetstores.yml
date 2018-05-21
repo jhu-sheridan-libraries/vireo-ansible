@@ -1,0 +1,80 @@
+---
+- name: un/mount remote assetstores
+  hosts: app
+  become: true
+
+  tasks:
+    - name: add app user group
+      group:
+        name:     "{{ app_group }}"
+        gid:      "{{ app_group_gid | default(omit) }}"
+        state:    present
+
+    - name: add app user
+      user:
+        name:     "{{ app_user }}"
+        shell:    "/bin/bash"
+        uid:      "{{ app_user_uid  | default(omit) }}"
+        group:    "{{ app_group }}"
+        comment:  "{{ app_user }} system account"
+
+    - name: set vars that follow from the value of remote_stores_available
+      set_fact:
+        local_dirs_presence: "absent"
+      when: remote_stores_available
+    - set_fact:
+        local_dirs_presence: "directory"
+      when: not remote_stores_available
+
+    - block:
+      - name: check to see if we currently have unneeded symlinks
+        stat:
+          path: "{{ vireo_install }}/data/{{item}}"
+        register: "sym"
+        with_items: "{{ assetstores }}"
+
+      - debug: msg="item.item={{item.item}}, item.stat={{item.stat}}"
+        with_items: "{{ sym.results }}"
+        when: debugging
+
+      - name: destroy symlinks to mounted assetstores
+        file:
+          dest: "{{ vireo_install }}/data/{{item.item}}"
+          state: absent
+          force: yes
+        when: "item.stat.islnk is defined and item.stat.islnk"
+        with_items: "{{ sym.results }}"
+      when: not remote_stores_available
+
+    # NOTE: this may delete any items currently in your local assetstore
+    - name: create or remove local assetstore directories
+      file:
+        dest: "{{ vireo_install }}/data/{{ item }}"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        state: "{{ local_dirs_presence }}"
+      with_items: "{{ assetstores }}"
+      become: True
+
+    - name: un/mount remote stores
+      mount:
+        name:   "{{ item.name }}"
+        src:    "{{ item.src }}"
+        fstype: "{{ item.fstype }}"
+        opts:   "{{ item.opts }}"
+        state:  "{{ item.state }}"
+      with_items: "{{ stores_fstab }}"
+
+    - block:
+      # TODO: currently points to the first stores_fstab entry.
+      # refine to locate the first with state: mounted
+      - name: create symlinks to mounted assetstores
+        file:
+          dest: "{{ vireo_install }}/data/{{ item }}"
+          src: "{{ stores_fstab[0].name }}/{{ stores_subdir }}/{{ item }}"
+          owner: "{{ app_user }}"
+          group: "{{ app_user }}"
+          state: link
+          force: yes
+        with_items: "{{ assetstores }}"
+      when: remote_stores_available

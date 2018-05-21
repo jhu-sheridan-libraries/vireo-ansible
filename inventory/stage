@@ -1,10 +1,11 @@
 # stage:
 # ------------------
-[app_stage]
+[app]
 vireostage.library.jhu.edu
 
 [stage:children]
-app_stage
+app
 
-[app_servers:children]
-app_stage
+# groups to emulate full environment:
+[app_not_prod:children]
+app

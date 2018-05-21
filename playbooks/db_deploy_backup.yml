@@ -51,12 +51,14 @@
         dest: "~/{{ backup_file }}"
 
     - name: add pg_hba entry for database
-      include: tasks/pg_hba_entry.yml
+      include_role:
+        name: postgres
+        tasks_from: pg_hba_entry
       vars:
-        connection_type: "local"
+        type: "local"
         database: "{{ db_name }}"
         user: "{{ db_user }}"
-        auth_method: "md5"
+        method: "md5"
         state: "present"
 
     - name: add pgpass entry for database
@@ -78,12 +80,14 @@
 
     # TODO: review
     - name: remove pg_hba entry for database
-      include: tasks/pg_hba_entry.yml
+      include_role:
+        name: postgres
+        tasks_from: pg_hba_entry
       vars:
-        connection_type: "local"
+        type: "local"
         database: "{{ db_name }}"
         user: "{{ db_user }}"
-        auth_method: "md5"
+        method: "md5"
         state: "absent"
 
     - name: remove pgpass entry for database

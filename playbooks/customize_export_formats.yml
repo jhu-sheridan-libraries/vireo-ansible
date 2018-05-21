@@ -1,6 +1,6 @@
 ---
 - name: customize export formats
-  hosts: app_servers
+  hosts: app
   become: yes
 
   tasks:

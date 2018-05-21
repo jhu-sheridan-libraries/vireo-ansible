@@ -1,0 +1,7 @@
+---
+- hosts: app
+  # become: true
+
+  roles:
+  - { role: java, become: true }
+  - { role: play }

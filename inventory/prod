@@ -1,10 +1,11 @@
 # prod:
 # ------------------
-[app_prod]
+[app]
 etd.library.jhu.edu
 
 [prod:children]
-app_prod
+app
 
-[app_servers:children]
-app_prod
+# groups to emulate full environment:
+[app_prod:children]
+app

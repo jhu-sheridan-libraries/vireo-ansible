@@ -11,3 +11,5 @@ roles/*
 !roles/local.*
 db_backup/*
 !db_backup/.keep
+mount/*
+!mount/.keep
