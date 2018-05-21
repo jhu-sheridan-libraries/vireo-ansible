@@ -9,3 +9,7 @@ vireo.test
 [dev:children]
 app
 #db
+
+# groups to emulate full environment:
+[app_not_prod:children]
+app
