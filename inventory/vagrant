@@ -1,15 +1,34 @@
+---
 # dev (vagrant):
 # ------------------
-[app]
-vireo.test
-
-#[db]
-#vireodb.test
-
-[dev:children]
-app
-#db
-
-# groups to emulate full environment:
-[app_not_prod:children]
-app
+all:
+  vars:
+    cpus: 1
+    memory: 1024
+  children:
+    dev:
+      children:
+        app:
+          hosts:
+            vireo-dev.test:
+              ansible_ip: '10.8.21.140'
+              aliases:
+                - 'vireo-dev'
+    default:
+      children:
+        app:
+    db:
+      children:
+        app:
+    db_prod:
+      children:
+        app:
+    app_prod:
+      children:
+        app:
+    db_not_prod:
+      children:
+        app:
+    app_not_prod:
+      children:
+        app:

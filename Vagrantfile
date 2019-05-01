@@ -1,74 +1,77 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# require_relative './script/authorize_key'
+default_ip="10.8.21.140"
+default_cpus=1
+default_memory=1024
+# centos
+default_vm_box="centos/6"
+default_vm_box_version="1902.01" # CentOS 6.10
+# debian
+#default_vm_box="debian/stretch64"
+#default_vm_box_version="9.2.0"
 
-domain          = "test"
-setup_complete  = false
-
-# NOTE: currently using the same OS for all boxen
-OS="centos" # "debian" || "centos"
+# NOTE" makes use of the Hashie gem to parse Ansible's YAML inventory files
+# install before using like:
+# vagrant plugin install hashie
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure(2) do |config|
-  package=""
-  if OS=="debian"
-    config.vm.box = "debian/jessie64"
-    package="_apt"
-  elsif OS=="centos"
-    config.vm.box = "centos/7"
-    package="_yum"
-  else
-    puts "you must set the OS variable to a valid value before continuing"
-    exit
-  end
+  # this same file is used for ansible inventory
+  inventory_path = 'inventory/vagrant'
+  inventory = YAML.load_file(inventory_path)
+  inventory.extend Hashie::Extensions::DeepFind
+  ansible_hosts = inventory.deep_find_all('hosts').inject(:merge)
 
-  {
-    # 'vireodb'    => '10.51.30.102',
-    'vireo'   => '10.51.30.101'
-  }.each do |short_name, ip|
-    config.vm.define short_name do |host|
-      host.vm.network 'private_network', ip: ip
-      host.vm.hostname = "#{short_name}.#{domain}"
+  ansible_hosts.each_with_index do |(host_name, host_vars), index|
+    # set empty host_vars, if none provided
+    if not host_vars
+      host_vars = Hash.new
+    end
+
+    # increment the default ip in case we need it
+    default_ip = default_ip.succ
+
+    config.vm.define host_name do |host|
+      # set up box image for each host
+      host.vm.box = host_vars['vagrant_box_image'] || default_vm_box
+      host.vm.box_version = host_vars['vagrant_box_version'] || default_vm_box_version
+
+      # configure network
+      host.vm.network 'private_network', ip: host_vars['ansible_ip'] || default_ip
+      host.vm.hostname = host_name
+
       # presumes installation of https://github.com/cogitatio/vagrant-hostsupdater on host
-      host.hostsupdater.aliases = ["#{short_name}"]
-      # avoinding "Authentication failure" issue
+      if host_vars['aliases']
+        host.hostsupdater.aliases = host_vars['aliases']
+      end
+
+      # avoiding "Authentication failure" issue
       host.ssh.insert_key = false
-      host.vm.synced_folder "mount",
-        "/vagrant",
-        type: "nfs",
-        mount_options: ['rw', 'vers=3', 'tcp', 'fsc' ,'actimeo=1'],
-        create: true
+
+      host.vm.synced_folder ".", "/vagrant", disabled: true
+      # host.vm.synced_folder "mount",
+      #   "/vagrant",
+      #   type: "nfs",
+      #   mount_options: ['rw', 'vers=3', 'tcp', 'fsc' ,'actimeo=1'],
+      #   create: true
 
       host.vm.provider "virtualbox" do |vb|
-        vb.name = "#{short_name}.#{domain}"
-        vb.memory = 1024
+        vb.name = host_name
+        vb.memory = host_vars['memory'] || default_memory
+        vb.cpus = host_vars['cpus'] || default_cpus
         vb.linked_clone = true
       end
 
-      # # do minimal provisioning (in order to do further work with Ansible)
-      # host.vm.provision "prerequisites", type: "shell", path: "script/prereqs#{package}.sh"
-      #
-      # # add authorized key to user created by the prereqs script
-      # authorize_key host, auto_user, auto_key
-
-      if short_name == "vireo" # last in the list
-        setup_complete = true
-      end
-
-      if setup_complete
-        # workaround for https://github.com/mitchellh/vagrant/issues/8142
-        host.vm.provision "shell",
-          inline: "sudo service network restart"
-
+      if index == (ansible_hosts.size - 1)
         host.vm.provision "ansible" do |ansible|
           ansible.galaxy_role_file = "requirements.yml"
-          ansible.inventory_path = "inventory/vagrant"
+          ansible.inventory_path = inventory_path
           ansible.playbook = "setup.yml"
-          ansible.limit = "all"
+          ansible.limit = "all,localhost"
           ansible.verbose = "v"
         end
       end
