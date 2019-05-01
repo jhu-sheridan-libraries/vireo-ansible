@@ -54,3 +54,10 @@ stores_subdir:  "vireo_data_prod"
 assetstores:
   - attachments
   - deposits
+
+# custom export formats
+custom_formats:
+- "dspace_mets_jhu"
+- "ProquestUMI_0"
+- "ProquestUMI_1"
+- "ProquestUMI_2"
