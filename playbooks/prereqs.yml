@@ -1,0 +1,30 @@
+- name: install prereqs
+  hosts: app
+
+  tasks:
+  - name: Install development packages
+    yum:
+      pkg: ['git', 'vim']
+      state: latest
+    become: true
+
+  - name: install java
+    include_role:
+      name: java
+      apply:
+        become: true
+    vars:
+      jdk: true
+    tags: ['java']
+
+  - name: install play
+    include_role:
+      name: play
+    tags: ['play']
+
+  - name: install postgres
+    include_role:
+      name: postgres
+      apply:
+        become: true
+    tags: ['postgres', 'db']

@@ -78,10 +78,13 @@ postgres_hba_entries:
 email_domain_name: "jhu.edu"
 
 # install vars
-vireo_install_dir: "/opt"
-vireo_install: "{{ vireo_install_dir }}/Vireo"
+vireo_install_dir:  "/opt"
+vireo_install:      "{{ vireo_install_dir }}/Vireo"
 
 # config vars
+vireo_environ:        "{{ environ | default('default') }}"
+# TODO: refactor to one var
+vireo_mail_smtp_host: "{{ vault_smtp_host | default('127.0.0.1') }}"
 country: "USA"
 
 # data transform queries
