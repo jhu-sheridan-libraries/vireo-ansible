@@ -28,6 +28,51 @@ copy_db_name:     "{{ db_name }}_copy"
 copy_backup_file: "{{ copy_db_name }}_backup.sql"
 netid_suffix:     "@johnshopkins.edu"
 retain_backup:    true
+postgres_version_major: 8
+postgres_version_minor: 4
+postgres_legacy:        true
+postgres_extra_packages: []
+postgres_extensions: []
+db_name:                "{{ vault_db_name }}"
+db_user:                "{{ vault_db_user }}"
+db_pass:                "{{ vault_db_pass }}"
+db_create_users:        true
+db_users:
+  - user:               "{{ db_user }}"
+    pass:               "{{ db_pass }}"
+    flags:              "CREATEDB,NOSUPERUSER,NOCREATEROLE"
+db_create_databases:    true
+db_databases:
+  - name:               "{{ db_name }}"
+    encoding:           "UTF-8"
+    owner:              "{{ db_user }}"
+
+# TODO: use firewall config to limit access to particular IPs
+# NOTE: samenet isn't supported by postgres 8.x
+# TODO: entries will be added in the reverse of the order in which they are listed here
+# subsequent runs with new entries will add the new ones to the top of the file.
+# therefore, the order of entries is essentially unpredictable.
+# consider modifying postgres role to whack pg_hba.conf before adding entries.
+# this may make entries and templates mutually exclusive, but otherwise,
+# this will be more intuitive, idempotent, and predictable
+# TODO: the db_refresh playbooks have the potential to whack these entries. fix
+postgres_hba_entries:
+- type:                 "host"
+  database:             "{{ db_name }}"
+  user:                 "{{ db_user }}"
+  address:              "127.0.0.1/32"
+  method:               "md5"
+- type:                 "local"
+  database:             "{{ db_name }}"
+  user:                 "{{ db_user }}"
+  method:               "md5"
+- type:                 "local"
+  database:             "all"
+  user:                 "postgres"
+  method:               "ident"
+
+# NOTE: comment out for initial or re-configuration
+# vireo_db_config_files: []
 
 # admin vars
 email_domain_name: "jhu.edu"

@@ -43,6 +43,8 @@
         password: "{{ db_pass }}"
         state: "present"
 
+    # TODO: register result, so we can check for changed before removing,
+    # to prevent removing a preexisting entry
     - name: add pgpass entry for source database
       include: tasks/pgpass.yml
       vars:
