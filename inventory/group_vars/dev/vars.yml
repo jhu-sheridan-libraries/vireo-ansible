@@ -24,3 +24,7 @@ stores_fstab:
   fstype:       "nfs"
   opts:         "rw,intr,noatime"
   state:        "absent" #"mounted"
+
+# user ids
+vagrant_group_gid:  1001
+vagrant_user_uid:   1001
