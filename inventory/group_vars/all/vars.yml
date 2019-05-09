@@ -80,12 +80,26 @@ email_domain_name: "jhu.edu"
 # install vars
 vireo_install_dir:  "/opt"
 vireo_install:      "{{ vireo_install_dir }}/Vireo"
+vireo_proxy:        true # currently, only proxying through Apache is supported
 
 # config vars
 vireo_environ:        "{{ environ | default('default') }}"
 # TODO: refactor to one var
 vireo_mail_smtp_host: "{{ vault_smtp_host | default('127.0.0.1') }}"
 country: "USA"
+
+# apache vars
+apache_https:                   true
+apache_remove_welcome:          false
+hostname:                       "vireo-{{ environ }}"
+domainname:                     "library.jhu.edu"
+apache_config_file:             "/etc/httpd/conf.d/01_{{ hostname }}.conf"
+# TODO: change after upgrading
+# Centos6 apache package version is old, so we need to take steps to
+# disable SSL compression and use a legacy configuration
+apache_legacy_configuration:    true
+ssl_self_sign_cert:             true
+ssl_support_legacy_clients:     false
 
 # data transform queries
 transform_queries:

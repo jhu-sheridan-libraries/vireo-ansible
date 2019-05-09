@@ -19,3 +19,6 @@
 
 - src: https://github.com/dheles/vireo3-ansible-role
   name: vireo
+
+- src: https://github.com/dheles/apache-ansible-role
+  name: apache

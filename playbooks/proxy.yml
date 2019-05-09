@@ -1,0 +1,17 @@
+- name: install and configure apache for proxying
+  hosts: app
+
+  tasks:
+  - name: install and configure apache for proxying
+    include_role:
+      name: apache
+    tags: ['proxy']
+
+  - name: add custom proxy settings to apache config
+    blockinfile:
+      block:  "{{ lookup('template', 'proxy.j2') }}"
+      dest: "{{ apache_config_file }}"
+      marker: "# {mark} proxy configs"
+      insertbefore: "</VirtualHost>"
+    notify: restart apache
+    become: true
