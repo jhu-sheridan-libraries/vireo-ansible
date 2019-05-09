@@ -16,3 +16,6 @@
 
 - src: https://github.com/dheles/play-ansible-role.git
   name: play
+
+- src: https://github.com/dheles/vireo3-ansible-role
+  name: vireo

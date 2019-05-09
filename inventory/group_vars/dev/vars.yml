@@ -8,19 +8,25 @@ debugging: true
 # private vars
 login_user_passphrase: "{{ vault_login_user_passphrase }}"
 
-play_version_minor:         4
-play_version_patch:         4
-play_checksum_algorithm:    "sha1" # sha1 | sha256 | md5
-# # play_checksum:              "194bcd9eb9cb075b0d78dcd410a58a72d1ab6f9c"
+# play_version_minor:         4
+# play_version_patch:         6
+# play_checksum_algorithm:    "sha1" # sha1 | sha256 | md5
 # play_checksum:    "d5fc42c0b63b03bfeb9859f5d47e2a20"
 
 # assetstore vars
 remote_stores_available:  false
-# stores_fstab:             []
-stores_subdir:            ""
-stores_fstab:
-- name:         "/mnt/ETD"
-  src:          "10.51.30.1:/Users/dheles/Source/vireo-ansible/mount"
-  fstype:       "nfs"
-  opts:         "rw,intr,noatime"
-  state:        "absent" #"mounted"
+stores_fstab:             []
+# stores_subdir:            ""
+# stores_fstab:
+# - name:         "/mnt/ETD"
+#   src:          "10.51.30.1:/Users/dheles/Source/vireo-ansible/mount"
+#   fstype:       "nfs"
+#   opts:         "rw,intr,noatime"
+#   state:        "absent" #"mounted"
+
+# user ids
+vagrant_group_gid:  1001
+vagrant_user_uid:   1001
+
+# config vars
+vireo_application_baseUrl:  "https://vireo-dev.test/"

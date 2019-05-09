@@ -1,0 +1,10 @@
+- name: install and configure vireo
+  hosts: app
+
+  tasks:
+  - name: install and configure vireo
+    include_role:
+      name: vireo
+      apply:
+        become: true
+    tags: ['vireo']

@@ -1,3 +1,7 @@
 ---
-- include: playbooks/install.yml
-- include: playbooks/mount_assetstores.yml
+- import_playbook:  playbooks/prereqs.yml
+  tags:             ['prereqs']
+- import_playbook:  playbooks/vireo.yml
+  tags:             ['vireo','install']
+
+# - include: playbooks/mount_assetstores.yml

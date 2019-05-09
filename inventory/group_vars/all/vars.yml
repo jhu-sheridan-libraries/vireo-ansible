@@ -1,4 +1,4 @@
-copy# REM: if you are looking for passwords or other variables
+# REM: if you are looking for passwords or other variables
 # that vary from dev to stage to prod, check the other subfolders
 
 # meta vars
@@ -9,12 +9,15 @@ debugging:      false
 # SSH vars
 login_user:             "deploy"
 login_group:            "{{ login_user }}"
+login_group_gid:        2042
+login_user_uid:         2042
 login_user_key:         "{{ project }}_{{ environ }}"
 create_login_user_key:  true
 
-app_user: "vireo"
-app_group: "{{ app_user }}"
-
+app_user:       "vireo"
+app_group:      "{{ app_user }}"
+app_group_gid:  501
+app_user_uid:   500
 
 # db vars
 postgres_user:    "postgres"
@@ -25,15 +28,63 @@ copy_db_name:     "{{ db_name }}_copy"
 copy_backup_file: "{{ copy_db_name }}_backup.sql"
 netid_suffix:     "@johnshopkins.edu"
 retain_backup:    true
+postgres_version_major: 8
+postgres_version_minor: 4
+postgres_legacy:        true
+postgres_extra_packages: []
+postgres_extensions: []
+db_name:                "{{ vault_db_name }}"
+db_user:                "{{ vault_db_user }}"
+db_pass:                "{{ vault_db_pass }}"
+db_create_users:        true
+db_users:
+  - user:               "{{ db_user }}"
+    pass:               "{{ db_pass }}"
+    flags:              "CREATEDB,NOSUPERUSER,NOCREATEROLE"
+db_create_databases:    true
+db_databases:
+  - name:               "{{ db_name }}"
+    encoding:           "UTF-8"
+    owner:              "{{ db_user }}"
+
+# TODO: use firewall config to limit access to particular IPs
+# NOTE: samenet isn't supported by postgres 8.x
+# TODO: entries will be added in the reverse of the order in which they are listed here
+# subsequent runs with new entries will add the new ones to the top of the file.
+# therefore, the order of entries is essentially unpredictable.
+# consider modifying postgres role to whack pg_hba.conf before adding entries.
+# this may make entries and templates mutually exclusive, but otherwise,
+# this will be more intuitive, idempotent, and predictable
+# TODO: the db_refresh playbooks have the potential to whack these entries. fix
+postgres_hba_entries:
+- type:                 "host"
+  database:             "{{ db_name }}"
+  user:                 "{{ db_user }}"
+  address:              "127.0.0.1/32"
+  method:               "md5"
+- type:                 "local"
+  database:             "{{ db_name }}"
+  user:                 "{{ db_user }}"
+  method:               "md5"
+- type:                 "local"
+  database:             "all"
+  user:                 "postgres"
+  method:               "ident"
+
+# NOTE: comment out for initial or re-configuration
+# vireo_db_config_files: []
 
 # admin vars
 email_domain_name: "jhu.edu"
 
 # install vars
-vireo_install_dir: "/opt"
-vireo_install: "{{ vireo_install_dir }}/Vireo"
+vireo_install_dir:  "/opt"
+vireo_install:      "{{ vireo_install_dir }}/Vireo"
 
 # config vars
+vireo_environ:        "{{ environ | default('default') }}"
+# TODO: refactor to one var
+vireo_mail_smtp_host: "{{ vault_smtp_host | default('127.0.0.1') }}"
 country: "USA"
 
 # data transform queries
