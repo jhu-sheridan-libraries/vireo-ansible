@@ -1,0 +1,7 @@
+  ProxyPreserveHost On
+  ProxyTimeout 600
+  {% if vireo_shibbolize %}
+  ProxyPass /Shibboleth.sso !
+  {% endif %}
+  ProxyPass / http://localhost:9000/
+  ProxyPassReverse / http://localhost:9000/

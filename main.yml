@@ -3,5 +3,7 @@
   tags:             ['prereqs']
 - import_playbook:  playbooks/vireo.yml
   tags:             ['vireo','install']
+- import_playbook:  playbooks/proxy.yml
+  tags:             ['proxy']
 
 # - include: playbooks/mount_assetstores.yml

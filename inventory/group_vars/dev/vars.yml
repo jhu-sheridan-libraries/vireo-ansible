@@ -29,4 +29,5 @@ vagrant_group_gid:  1001
 vagrant_user_uid:   1001
 
 # config vars
-vireo_application_baseUrl:  "https://vireo-dev.test/"
+domainname:                 "test"
+vireo_application_baseUrl:  "https://{{ hostname }}.{{ domainname }}/"
