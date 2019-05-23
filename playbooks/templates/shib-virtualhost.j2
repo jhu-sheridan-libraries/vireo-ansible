@@ -1,0 +1,6 @@
+<Location /login/ShibbolethAuthentication/return>
+  AuthType shibboleth
+  ShibRequestSetting requireSession 1
+  ShibUseHeaders on
+  require valid-user
+</Location>

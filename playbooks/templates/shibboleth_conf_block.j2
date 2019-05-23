@@ -1,0 +1,21 @@
+# Shibboleth Authentication Module
+# ~~~~~
+%{{ vireo_environ }}.auth.pass.visible=true
+%{{ vireo_environ }}.auth.shib.enabled=true
+%{{ vireo_environ }}.auth.shib.mock=false
+%{{ vireo_environ }}.auth.shib.log=true
+%{{ vireo_environ }}.auth.shib.name=Johns Hopkins Enterprise Authentication
+%{{ vireo_environ }}.auth.shib.description=Users who are currently active with the university may login using their JHED ID
+%{{ vireo_environ }}.auth.shib.login.forceSSL=true
+%{{ vireo_environ }}.auth.shib.login.url=/login/ShibbolethAuthentication/return
+%{{ vireo_environ }}.auth.shib.logout.url=https://login.johnshopkins.edu/cgi-bin/logoff.pl
+%{{ vireo_environ }}.auth.shib.logout.enabled=true
+# Required attributes, netid is only required if it is the primary identifier
+%{{ vireo_environ }}.auth.shib.attribute.netid=eppn
+%{{ vireo_environ }}.auth.shib.attribute.email=mail
+%{{ vireo_environ }}.auth.shib.attribute.firstName=givenname
+%{{ vireo_environ }}.auth.shib.attribute.lastName=sn
+%{{ vireo_environ }}.auth.shib.attribute.currentPhoneNumber=telephonenumber
+%{{ vireo_environ }}.auth.shib.attribute.currentDepartment=jheunivdepartmentnumber
+%{{ vireo_environ }}.auth.shib.attribute.currentDegree=johnshopkinseduhighestdegree
+%{{ vireo_environ }}.auth.shib.attribute.currentMajor=johnshopkinsedumajor
