@@ -21,3 +21,9 @@ smtp_host: "{{ vault_smtp_host }}"
 
 # assetstore vars
 # stores_subdir:  "vireo_data_stage"
+
+# vireo_application_baseUrl:  "http://vireostage.library.jhu.edu/"
+
+# apache vars
+hostname: "vireostage.library.jhu.edu"
+apache_config_file:    "/etc/httpd/conf.d/etdvireo.conf"

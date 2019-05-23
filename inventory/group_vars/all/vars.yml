@@ -126,3 +126,27 @@ custom_formats:
 - "ProquestUMI_0"
 - "ProquestUMI_1"
 - "ProquestUMI_2"
+
+# shib vars
+vireo_shibbolize:                 true # if true, vireo_proxy must also be true
+# TODO: application mode also controls shib mock. decouple.
+# https://github.com/dheles/Vireo/commit/03df0104748bea3994a7997fe024c29bf797584d
+vireo_application_mode:           "prod" # [dev, prod]
+shib_install:                     false
+shib_backup_configs:              true
+shib_sp_cert:                     "{{ vault_shib_sp_cert }}"
+shib_sp_key:                      "{{ vault_shib_sp_key }}"
+shib_repo_name:                   "security_shibboleth"
+shib_repo_description:            "Shibboleth (CentOS_CentOS-6)"
+shib_repo_mirrorlist:             "https://shibboleth.net/cgi-bin/mirrorlist.cgi/CentOS_CentOS-6"
+shib_repo_gpgkey:                 "https://shibboleth.net/downloads/service-provider/RPMS/repomd.xml.key"
+shib_virtualhost_template:        "templates/shib-virtualhost.j2"
+shib_attribute_template:          "templates/vault-shib-attribute-map.xml"
+shib_config_template:             "templates/vault-shibboleth2.xml"
+shib_entity_id:                   "{{ vault_shib_entity_id }}"
+shib_idp_entity_id:               "{{ vault_shib_idp_entity_id }}"
+shib_contact:                     "{{ vault_shib_contact }}"
+shib_idp_metadata:
+- filename: "idp-metadata.xml"
+  src: "templates/vault-idpjhedu-metadata.xml"
+vireo_shib_config:                "shibboleth_conf_block.j2"

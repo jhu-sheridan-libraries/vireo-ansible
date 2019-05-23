@@ -17,3 +17,7 @@ admin_users: "{{ vault_admin_users }}"
 
 # mail vars
 smtp_host: "{{ vault_smtp_host }}"
+
+# apache vars
+hostname:           "etd.library.jhu.edu"
+apache_config_file: "/etc/httpd/conf.d/etd.conf"
