@@ -1,4 +1,5 @@
 # Shibboleth Authentication Module
+# NOTE: auth.shib.attribute values must be lowercase
 # ~~~~~
 %{{ vireo_environ }}.auth.pass.visible=true
 %{{ vireo_environ }}.auth.shib.enabled=true
@@ -13,7 +14,7 @@
 # Required attributes, netid is only required if it is the primary identifier
 %{{ vireo_environ }}.auth.shib.attribute.netid=eppn
 %{{ vireo_environ }}.auth.shib.attribute.email=mail
-%{{ vireo_environ }}.auth.shib.attribute.firstName=givenname
+%{{ vireo_environ }}.auth.shib.attribute.firstName={{ shib_firstname_attribute }}
 %{{ vireo_environ }}.auth.shib.attribute.lastName=sn
 %{{ vireo_environ }}.auth.shib.attribute.currentPhoneNumber=telephonenumber
 %{{ vireo_environ }}.auth.shib.attribute.currentDepartment=jheunivdepartmentnumber

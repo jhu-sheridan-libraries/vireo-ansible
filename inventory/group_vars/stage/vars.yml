@@ -27,3 +27,6 @@ smtp_host: "{{ vault_smtp_host }}"
 # apache vars
 hostname: "vireostage.library.jhu.edu"
 apache_config_file:    "/etc/httpd/conf.d/etdvireo.conf"
+
+# shib vars
+shib_firstname_attribute:         "jhegivennamepreferred" # lowercase: givenname | jhegivennamepreferred
