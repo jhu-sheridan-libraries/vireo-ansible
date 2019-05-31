@@ -22,3 +22,6 @@
 
 - src: https://github.com/dheles/apache-ansible-role
   name: apache
+
+- src: https://github.com/dheles/shibboleth-sp-ansible-role.git
+  name: shibboleth-sp

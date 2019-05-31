@@ -10,7 +10,7 @@
       apache_service: "httpd"
 
   - include_role:
-      name: shibboleth
+      name: shibboleth-sp
     tags: [shib]
 
   # NOTE: just for compatibility with existing environments. TODO: make this unnecessary
