@@ -1,0 +1,26 @@
+- name: install shibboleth sp
+  hosts: app
+
+  tasks:
+  - name: include apache role to get its "restart apache" handler
+    include_role:
+      name: apache
+      tasks_from: dolittle
+    vars:
+      apache_service: "httpd"
+
+  - include_role:
+      name: shibboleth
+    tags: [shib]
+
+  # NOTE: just for compatibility with existing environments. TODO: make this unnecessary
+  - name: add extra shib conf file for apache
+    template:
+      src:  "templates/shib.conf"
+      dest: "/etc/httpd/conf.d/"
+    become: true
+
+  - name: configure vireo to use shibboleth authentication
+    include_role:
+      name: vireo
+      tasks_from: shibbolize
