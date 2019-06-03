@@ -1,0 +1,8 @@
+- name: brand vireo
+  hosts: app
+
+  tasks:
+  - name: brand vireo with the vireo role
+    include_role:
+      name: vireo
+      tasks_from: branding

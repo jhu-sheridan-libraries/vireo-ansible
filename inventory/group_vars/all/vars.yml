@@ -151,3 +151,8 @@ shib_idp_metadata:
   src: "templates/vault-idpjhedu-metadata.xml"
 vireo_shib_config:                "shibboleth_conf_block.j2"
 shib_firstname_attribute:         "givenname" # lowercase: givenname | jhegivennamepreferred
+
+# branding vars:
+vireo_logos:
+- "files/left-logo"
+- "files/right-logo"
