@@ -7,12 +7,20 @@ version:        "0.2.0"
 debugging:      false
 
 # SSH vars
-login_user:             "deploy"
-login_group:            "{{ login_user }}"
-login_group_gid:        2042
-login_user_uid:         2042
-login_user_key:         "{{ project }}_{{ environ }}"
-create_login_user_key:  true
+use_master_user:        true
+remote_user:            "{{ lookup('ini', 'remote_user section=cross-project file=~/.ansible.ini') }}"
+login_user:             "{{ lookup('ini', 'login_user section=cross-project file=~/.ansible.ini') }}"
+# login_group_gid:        2042
+# login_user_uid:         2042
+login_user_key:         "jhu_ssh_key"
+create_login_user_key:  false
+login_user_grant_sudo:  false
+
+ssh_settings:
+- regexp: "^PermitRootLogin"
+  setting: "PermitRootLogin no"
+- regexp: "^DenyUsers deploy"
+  setting: "DenyUsers deploy"
 
 app_user:       "vireo"
 app_group:      "{{ app_user }}"
