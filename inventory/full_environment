@@ -7,11 +7,11 @@
 
 # dev:
 # ------------------
-#[app_dev]
-#vireo-dev.jhu.dev
+[app_dev]
+vireo-dev.test
 
-#[dev:children]
-#app_dev
+[dev:children]
+app_dev
 
 # stage:
 # ------------------
@@ -32,10 +32,10 @@ app_prod
 # groups:
 # ------------------
 [app_servers:children]
-#app_dev
-app_stage
+app_dev
+#app_stage
 app_prod
 
 [app_not_prod:children]
-#app_dev
-app_stage
+app_dev
+#app_stage
