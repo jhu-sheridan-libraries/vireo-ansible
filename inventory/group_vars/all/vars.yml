@@ -2,8 +2,8 @@
 # that vary from dev to stage to prod, check the other subfolders
 
 # meta vars
-project:        "vireo-ansible"
-version:        "0.2.0"
+project:        "vireo"
+version:        "1.0.0"
 debugging:      false
 
 # SSH vars
