@@ -24,6 +24,11 @@ stores_fstab:             []
 #   opts:         "rw,intr,noatime"
 #   state:        "absent" #"mounted"
 
+# SSH vars
+login_group:            "{{ lookup('ini', 'login_group section=dev file=~/.ansible.ini default=' + login_user ) }}"
+login_password:         "{{ lookup('ini', 'login_password section=dev file=~/.ansible.ini') }}"
+login_user_grant_sudo:  true
+
 # user ids
 vagrant_group_gid:  1001
 vagrant_user_uid:   1001
@@ -32,5 +37,7 @@ vagrant_user_uid:   1001
 # domainname:                 "test"
 vireo_application_baseUrl:  "https://{{ hostname }}.{{ domainname }}/"
 
-# apache vars
-shib_entity_id:     "https://vireo-dev.library.jhu.edu/shibboleth"
+# shib vars
+shib_install:                     true
+shib_entity_id:                   "https://vireo-dev.library.jhu.edu/shibboleth"
+shib_firstname_attribute:         "jhegivennamepreferred" # lowercase: givenname | jhegivennamepreferred
