@@ -164,3 +164,6 @@ shib_firstname_attribute:         "givenname" # lowercase: givenname | jhegivenn
 vireo_logos:
 - "files/left-logo"
 - "files/right-logo"
+
+# testing vars
+set_up_tests:   false
