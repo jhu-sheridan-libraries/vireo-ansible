@@ -1,4 +1,4 @@
 ---
 # NOTE: only really works with full_environment inventory file
-- include: db_backup.yml
-- include: db_deploy_backup.yml
+- import_playbook: db_backup.yml
+- import_playbook: db_deploy_backup.yml

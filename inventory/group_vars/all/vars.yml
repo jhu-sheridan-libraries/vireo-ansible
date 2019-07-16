@@ -10,11 +10,14 @@ debugging:      false
 use_master_user:        true
 remote_user:            "{{ lookup('ini', 'remote_user section=cross-project file=~/.ansible.ini') }}"
 login_user:             "{{ lookup('ini', 'login_user section=cross-project file=~/.ansible.ini') }}"
+login_group:            "{{ lookup('ini', 'login_group section=cross-project file=~/.ansible.ini') }}"
 # login_group_gid:        2042
 # login_user_uid:         2042
 login_user_key:         "jhu_ssh_key"
 create_login_user_key:  false
 login_user_grant_sudo:  false
+ssh_aliases:
+- "etd-{{ environ }}"
 
 ssh_settings:
 - regexp: "^PermitRootLogin"
@@ -35,7 +38,7 @@ db_backup_file:   "{{ db_name }}_{{ environ }}_backup.sql"
 copy_db_name:     "{{ db_name }}_copy"
 copy_backup_file: "{{ copy_db_name }}_backup.sql"
 netid_suffix:     "@johnshopkins.edu"
-retain_backup:    true
+db_retain_backup: true
 postgres_version_major: 8
 postgres_version_minor: 4
 postgres_legacy:        true
@@ -110,7 +113,7 @@ ssl_self_sign_cert:             true
 ssl_support_legacy_clients:     false
 
 # data transform queries
-transform_queries:
+db_transform_queries:
 - "institutionalid_from_netid.sql.j2"
 - "anonymize_db.sql.j2"
 
