@@ -1,0 +1,5 @@
+---
+- name: restart play
+  # NOTE: for some reason, the service module doesn't seem to work for vireo
+  # service: name=play state=restarted
+  shell: "service play restart"

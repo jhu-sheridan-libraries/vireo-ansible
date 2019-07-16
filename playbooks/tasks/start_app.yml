@@ -1,0 +1,5 @@
+---
+- name: start play
+  # NOTE: for some reason, the service module doesn't seem to work for vireo
+  # service: name=play state=started
+  shell: "service play start"
