@@ -1,0 +1,6 @@
+---
+- name: stop play
+  # NOTE:since the service module doesn't seem to be able to restart vireo,
+  # we won't use it to stop it either
+  # service: name=play state=stopped
+  shell: "service play stop"

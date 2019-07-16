@@ -25,7 +25,6 @@ stores_fstab:             []
 #   state:        "absent" #"mounted"
 
 # SSH vars
-login_group:            "{{ lookup('ini', 'login_group section=dev file=~/.ansible.ini default=' + login_user ) }}"
 login_password:         "{{ lookup('ini', 'login_password section=dev file=~/.ansible.ini') }}"
 login_user_grant_sudo:  true
 
