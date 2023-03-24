@@ -22,8 +22,8 @@ default_memory=1024
 # centos
 # default_vm_box="centos/6"
 # default_vm_box_version="1902.01" # CentOS 6.10
-default_vm_box="centos/7"
-default_vm_box_version="2004.01"
+default_vm_box="bento/centos-7"
+default_vm_box_version="202303.13.0"
 # debian
 #default_vm_box="debian/stretch64"
 #default_vm_box_version="9.2.0"
