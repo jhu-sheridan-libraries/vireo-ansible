@@ -1,12 +1,29 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# vagrant plugin install vagrant-vbguest --plugin-version 0.21
+# Providers: VirtualBox, VMware, Hyper-V
+# vagrant up --provider=PROVIDER`
+
+required_plugins = %w(vagrant-vbguest vagrant-hostsupdater hashie)
+plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+if not plugins_to_install.empty?
+  puts "Installing plugins: #{plugins_to_install.join(' ')}"
+  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+    exec "vagrant #{ARGV.join(' ')}"
+  else
+    abort "Installation of one or more plugins has failed. Aborting."
+  end
+end
+
 default_ip="10.8.21.140"
 default_cpus=1
 default_memory=1024
 # centos
-default_vm_box="centos/6"
-default_vm_box_version="1902.01" # CentOS 6.10
+# default_vm_box="centos/6"
+# default_vm_box_version="1902.01" # CentOS 6.10
+default_vm_box="centos/7"
+default_vm_box_version="2004.01"
 # debian
 #default_vm_box="debian/stretch64"
 #default_vm_box_version="9.2.0"
@@ -25,6 +42,10 @@ Vagrant.configure(2) do |config|
   inventory = YAML.load_file(inventory_path)
   inventory.extend Hashie::Extensions::DeepFind
   ansible_hosts = inventory.deep_find_all('hosts').inject(:merge)
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+  end
 
   ansible_hosts.each_with_index do |(host_name, host_vars), index|
     # set empty host_vars, if none provided
@@ -51,8 +72,10 @@ Vagrant.configure(2) do |config|
 
       # avoiding "Authentication failure" issue
       host.ssh.insert_key = false
-
+      # host.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+      # host.ssh.extra_args = ["-t", "mkdir -p /vagrant ; cd /vagrant; bash --login"]
       host.vm.synced_folder ".", "/vagrant", disabled: true
+      # host.vm.synced_folder ".", "/home/vagrant/provision", type: "rsync"
       # host.vm.synced_folder "mount",
       #   "/vagrant",
       #   type: "nfs",
